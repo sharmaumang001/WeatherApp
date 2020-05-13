@@ -11,12 +11,20 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.weather.R;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 
 public class WeatherController extends AppCompatActivity {
@@ -25,15 +33,17 @@ public class WeatherController extends AppCompatActivity {
      final int REQUEST_CODE = 123;
     final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather";
 
-    final String APP_ID = "e72____PLEASE_REPLACE_ME_____13";
+    final String APP_ID = "1546c83c2a8959e4a96fa461eaee6eea";
 
     final long MIN_TIME = 5000;
 
     final float MIN_DISTANCE = 1000;
 
+
+
+
+
     String location_provider = LocationManager.NETWORK_PROVIDER;
-
-
     TextView tempView, locationView;
     Button changeCityButton;
     ImageView weatherView;
@@ -67,8 +77,15 @@ public class WeatherController extends AppCompatActivity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                Log.d("Weather", "onLocationChanged() callback received");
+                Log.d("weather", "onLocationChanged() callback received");
+                String longitude = String.valueOf(location.getLongitude());
+                String latittude = String.valueOf(location.getLatitude());
 
+                RequestParams params = new RequestParams();
+                params.put("lat",latittude);
+                params.put("long",longitude);
+                params.put("appID",APP_ID);
+                someNetworking(params);
             }
 
             @Override
@@ -114,6 +131,29 @@ public class WeatherController extends AppCompatActivity {
             }else
                 Log.d("weather","onRequestPermissionResult() :permission Denied");
         }
+    }
+
+    private void someNetworking(RequestParams params){
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get(WEATHER_URL,params, new JsonHttpResponseHandler(){
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response){
+                Log.d("weather","DATA COLLECTED"+response.toString());
+
+            }
+
+            @Override
+            public  void onFailure(int statusCode, Header[] headers,Throwable e, JSONObject response){
+                Toast.makeText(WeatherController.this,"Request Failed",Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+
+
     }
 
 
