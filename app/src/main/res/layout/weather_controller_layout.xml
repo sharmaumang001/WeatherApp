@@ -7,6 +7,7 @@
     android:background="@drawable/weather_background">
 
     <FrameLayout
+        android:id="@+id/weather"
         android:layout_width="346dp"
         android:layout_height="251dp"
         android:layout_marginBottom="60dp"
@@ -17,6 +18,11 @@
         app:layout_constraintTop_toBottomOf="@+id/tempTV"
         app:layout_constraintVertical_bias="1.0">
 
+        <ImageView
+            android:id="@+id/weather_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/dunno" />
     </FrameLayout>
 
     <TextView
