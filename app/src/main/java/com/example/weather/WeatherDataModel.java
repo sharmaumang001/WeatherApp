@@ -63,8 +63,15 @@ public class WeatherDataModel {
         return "dunno";
     }
 
+    public String getTempreture() {
+        return tempreture + "°";
+    }
 
+    public String getIconName() {
+        return iconName;
+    }
 
-
-
+    public String getCityName() {
+        return cityName;
+    }
 }

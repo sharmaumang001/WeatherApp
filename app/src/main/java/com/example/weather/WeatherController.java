@@ -144,6 +144,8 @@ public class WeatherController extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response){
                 Log.d("weather","DATA COLLECTED"+ response.toString() );
 
+                WeatherDataModel weatherData = WeatherDataModel.fromJSON(response);
+
             }
 
             @Override
@@ -152,6 +154,8 @@ public class WeatherController extends AppCompatActivity {
             }
 
         });
+
+
 
 
 
