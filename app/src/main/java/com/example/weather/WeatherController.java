@@ -105,7 +105,7 @@ public class WeatherController extends AppCompatActivity {
             }
         };
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if ( ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -137,11 +137,12 @@ public class WeatherController extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
 
+
         client.get(WEATHER_URL,params, new JsonHttpResponseHandler(){
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response){
-                Log.d("weather","DATA COLLECTED"+response.toString());
+                Log.d("weather","DATA COLLECTED"+ response.toString() );
 
             }
 
@@ -151,6 +152,9 @@ public class WeatherController extends AppCompatActivity {
             }
 
         });
+
+
+
 
 
 
