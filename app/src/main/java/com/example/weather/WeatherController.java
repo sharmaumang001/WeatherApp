@@ -30,7 +30,8 @@ import cz.msebera.android.httpclient.Header;
 public class WeatherController extends AppCompatActivity {
 
 
-     final int REQUEST_CODE = 123;
+    final int REQUEST_CODE = 123;
+
     final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather";
 
     final String APP_ID = "1546c83c2a8959e4a96fa461eaee6eea";
@@ -69,10 +70,10 @@ public class WeatherController extends AppCompatActivity {
         super.onResume();
         Log.d("weather", "onResume() called");
         getWeatherForCurrentLocation();
-
     }
 
     private void getWeatherForCurrentLocation() {
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -105,7 +106,7 @@ public class WeatherController extends AppCompatActivity {
             }
         };
 
-        if ( ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if ( ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -113,11 +114,10 @@ public class WeatherController extends AppCompatActivity {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
             return;
         }
-        locationManager.requestLocationUpdates(location_provider, MIN_TIME, MIN_DISTANCE, locationListener);
-
+        locationManager.requestLocationUpdates(location_provider,MIN_TIME,MIN_DISTANCE,locationListener);
     }
 
     @Override
@@ -145,24 +145,25 @@ public class WeatherController extends AppCompatActivity {
                 Log.d("weather","DATA COLLECTED"+ response.toString() );
 
                 WeatherDataModel weatherData = WeatherDataModel.fromJSON(response);
-
+                Update_UI(weatherData);
             }
 
             @Override
             public  void onFailure(int statusCode, Header[] headers,Throwable e, JSONObject response){
                 Toast.makeText(WeatherController.this,"Request Failed",Toast.LENGTH_SHORT).show();
             }
-
         });
-
-
-
-
-
-
-
-
     }
+
+    private void Update_UI(WeatherDataModel Weather) {
+
+        tempView.setText(Weather.getTempreture());
+        locationView.setText(Weather.getCityName());
+        int resourceID = getResources().getIdentifier(Weather.getIconName(),"drawable",getPackageName());
+        weatherView.setImageResource(resourceID);
+    }
+
+
 
 
 
