@@ -32,9 +32,9 @@ public class WeatherController extends AppCompatActivity {
 
     final int REQUEST_CODE = 123;
 
-    final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather";
+    final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?lat=-122.5564&lon=37.1516&appid=e****************************a";
 
-    final String APP_ID = "1546c83c2a8959e4a96fa461eaee6eea";
+    final String APP_ID = "5815127febc1e06290ed32df674e2826";
 
     final long MIN_TIME = 5000;
 
@@ -84,7 +84,7 @@ public class WeatherController extends AppCompatActivity {
 
                 RequestParams params = new RequestParams();
                 params.put("lat", latittude);
-                params.put("long", longitude);
+                params.put("lon", longitude);
                 params.put("appID", APP_ID);
                 someNetworking(params);
             }
@@ -140,6 +140,9 @@ public class WeatherController extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
 
 
+
+
+
         client.get(WEATHER_URL,params, new JsonHttpResponseHandler(){
 
             @Override
@@ -152,9 +155,10 @@ public class WeatherController extends AppCompatActivity {
 
             @Override
             public  void onFailure(int statusCode, Header[] headers,Throwable e, JSONObject response){
-                Log.e("weather","Fail"+e.toString());
+                Log.e("weather","Fail  "+e.toString());
+                Log.d("weather","Fail..status code"+statusCode);
                 Toast.makeText(WeatherController.this,"Request Failed",Toast.LENGTH_SHORT).show();
-            }
+             }
         });
     }
 
