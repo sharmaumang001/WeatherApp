@@ -41,9 +41,6 @@ public class WeatherController extends AppCompatActivity {
     final float MIN_DISTANCE = 1000;
 
 
-
-
-
     String location_provider = LocationManager.NETWORK_PROVIDER;
     TextView tempView, locationView;
     Button changeCityButton;
@@ -83,9 +80,9 @@ public class WeatherController extends AppCompatActivity {
                 String latittude = String.valueOf(location.getLatitude());
 
                 RequestParams params = new RequestParams();
-                params.put("lat",latittude);
-                params.put("long",longitude);
-                params.put("appID",APP_ID);
+                params.put("lat", latittude);
+                params.put("long", longitude);
+                params.put("appID", APP_ID);
                 someNetworking(params);
             }
 
@@ -106,7 +103,8 @@ public class WeatherController extends AppCompatActivity {
             }
         };
 
-        if ( ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -114,10 +112,10 @@ public class WeatherController extends AppCompatActivity {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},REQUEST_CODE);
             return;
         }
-        locationManager.requestLocationUpdates(location_provider,MIN_TIME,MIN_DISTANCE,locationListener);
+        locationManager.requestLocationUpdates(location_provider, MIN_TIME, MIN_DISTANCE, locationListener);
     }
 
     @Override
@@ -128,6 +126,7 @@ public class WeatherController extends AppCompatActivity {
 
             if (grantResults.length > 0 && grantResults[0]==PackageManager.PERMISSION_GRANTED) {
                 Log.d("weather", "onRequestPermissionResult() :permission Granted");
+                getWeatherForCurrentLocation();
             }else
                 Log.d("weather","onRequestPermissionResult() :permission Denied");
         }
