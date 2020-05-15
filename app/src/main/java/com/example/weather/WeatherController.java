@@ -41,7 +41,7 @@ public class WeatherController extends AppCompatActivity {
     final float MIN_DISTANCE = 1000;
 
 
-    String location_provider = LocationManager.NETWORK_PROVIDER;
+    String location_provider = LocationManager.GPS_PROVIDER;
     TextView tempView, locationView;
     Button changeCityButton;
     ImageView weatherView;
@@ -79,6 +79,9 @@ public class WeatherController extends AppCompatActivity {
                 String longitude = String.valueOf(location.getLongitude());
                 String latittude = String.valueOf(location.getLatitude());
 
+                Log.d("weather","latitude"+latittude);
+                Log.d("weather","longitude"+longitude);
+
                 RequestParams params = new RequestParams();
                 params.put("lat", latittude);
                 params.put("long", longitude);
@@ -93,7 +96,7 @@ public class WeatherController extends AppCompatActivity {
 
             @Override
             public void onProviderEnabled(String provider) {
-
+                Log.d("weather", "onProviderEnables() callback received ");
             }
 
             @Override
@@ -112,10 +115,10 @@ public class WeatherController extends AppCompatActivity {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
             return;
         }
-        locationManager.requestLocationUpdates(location_provider, MIN_TIME, MIN_DISTANCE, locationListener);
+        locationManager.requestLocationUpdates(location_provider,MIN_TIME, MIN_DISTANCE,locationListener);
     }
 
     @Override
@@ -149,6 +152,7 @@ public class WeatherController extends AppCompatActivity {
 
             @Override
             public  void onFailure(int statusCode, Header[] headers,Throwable e, JSONObject response){
+                Log.e("weather","Fail"+e.toString());
                 Toast.makeText(WeatherController.this,"Request Failed",Toast.LENGTH_SHORT).show();
             }
         });
