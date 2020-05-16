@@ -32,8 +32,6 @@ public class WeatherController extends AppCompatActivity {
 
     final int REQUEST_CODE = 123;
 
-    final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?lat=-122.5564&lon=37.1516&appid=e****************************a";
-
     final String APP_ID = "5815127febc1e06290ed32df674e2826";
 
     final long MIN_TIME = 5000;
@@ -86,7 +84,7 @@ public class WeatherController extends AppCompatActivity {
                 params.put("lat", latittude);
                 params.put("lon", longitude);
                 params.put("appID", APP_ID);
-                someNetworking(params);
+                someNetworking(params,latittude,longitude);
             }
 
             @Override
@@ -135,12 +133,11 @@ public class WeatherController extends AppCompatActivity {
         }
     }
 
-    private void someNetworking(RequestParams params){
+    private void someNetworking(RequestParams params,String lat, String lon){
 
         AsyncHttpClient client = new AsyncHttpClient();
 
-
-
+        String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&appid="+APP_ID;
 
 
         client.get(WEATHER_URL,params, new JsonHttpResponseHandler(){
