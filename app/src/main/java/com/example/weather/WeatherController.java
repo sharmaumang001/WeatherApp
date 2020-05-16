@@ -2,12 +2,14 @@ package com.example.weather;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,14 +36,18 @@ public class WeatherController extends AppCompatActivity {
 
     final String APP_ID = "5815127febc1e06290ed32df674e2826";
 
-    final long MIN_TIME = 5000;
+    final long MIN_TIME = 1000;
 
-    final float MIN_DISTANCE = 1000;
+    final float MIN_DISTANCE = 1;
+
+    String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
+
+
 
 
     String location_provider = LocationManager.GPS_PROVIDER;
     TextView tempView, locationView;
-    Button changeCityButton;
+    Button changeCityButton,test_button;
     ImageView weatherView;
     LocationManager locationManager;
     LocationListener locationListener;
@@ -58,13 +64,41 @@ public class WeatherController extends AppCompatActivity {
         weatherView = findViewById(R.id.weather_image);
 
 
+
+        changeCityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(WeatherController.this,City_Change.class);
+                startActivity(myIntent);
+
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d("weather", "onResume() called");
-        getWeatherForCurrentLocation();
+
+        Intent myIntent = getIntent();
+        String city = myIntent.getStringExtra("city");
+
+        if (city != null) {
+            getWeatherForNewcity(city);
+
+        } else {
+
+            getWeatherForCurrentLocation();
+        }
+    }
+
+    private void getWeatherForNewcity(String city){
+
+        RequestParams parmas_1= new RequestParams();
+        parmas_1.put("q",city);
+        parmas_1.put("appid",APP_ID);
+
+        someNetworking(parmas_1);
     }
 
     private void getWeatherForCurrentLocation() {
@@ -83,8 +117,8 @@ public class WeatherController extends AppCompatActivity {
                 RequestParams params = new RequestParams();
                 params.put("lat", latittude);
                 params.put("lon", longitude);
-                params.put("appID", APP_ID);
-                someNetworking(params,latittude,longitude);
+                params.put("appid", APP_ID);
+                someNetworking(params);
             }
 
             @Override
@@ -116,7 +150,8 @@ public class WeatherController extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
             return;
         }
-        locationManager.requestLocationUpdates(location_provider,MIN_TIME, MIN_DISTANCE,locationListener);
+        locationManager.requestLocationUpdates(location_provider,MIN_TIME,MIN_DISTANCE,locationListener);
+
     }
 
     @Override
@@ -133,12 +168,9 @@ public class WeatherController extends AppCompatActivity {
         }
     }
 
-    private void someNetworking(RequestParams params,String lat, String lon){
+    private void someNetworking(RequestParams params){
 
         AsyncHttpClient client = new AsyncHttpClient();
-
-        String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&appid="+APP_ID;
-
 
         client.get(WEATHER_URL,params, new JsonHttpResponseHandler(){
 
@@ -166,9 +198,5 @@ public class WeatherController extends AppCompatActivity {
         int resourceID = getResources().getIdentifier(Weather.getIconName(),"drawable",getPackageName());
         weatherView.setImageResource(resourceID);
     }
-
-
-
-
 
 }

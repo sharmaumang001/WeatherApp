@@ -8,12 +8,12 @@
 
     <TextView
         android:id="@+id/getcity"
-        android:layout_width="404dp"
-        android:layout_height="89dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="160dp"
         android:text="CHANGE CITY"
         android:textColor="#FFFFFF"
-        android:textSize="60sp"
+        android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/city_name"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,13 +24,14 @@
 
     <EditText
         android:id="@+id/city_name"
-        android:layout_width="302dp"
-        android:layout_height="53dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#BAB5B5"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Enter City Name"
+        android:inputType="textAutoCorrect"
+        android:hint="Enter City Name"
         android:textAlignment="center"
-        android:textColor="#B511D1"
+        android:textColor="@color/white"
         android:textColorHighlight="#FFFFFF"
         android:textSize="35sp"
         android:textStyle="bold"
@@ -41,15 +42,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.584" />
 
-    <Button
-        android:id="@+id/back_button"
+    <ImageButton
+        android:id="@+id/Back_Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/left"
         app:layout_constraintBottom_toTopOf="@+id/getcity"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.009"
+        app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.246" />
+        app:layout_constraintVertical_bias="0.177"
+        app:srcCompat="@drawable/left" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
