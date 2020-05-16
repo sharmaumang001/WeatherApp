@@ -199,4 +199,13 @@ public class WeatherController extends AppCompatActivity {
         weatherView.setImageResource(resourceID);
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (locationManager!=null){
+            locationManager.removeUpdates(locationListener);
+        }
+    }
 }
