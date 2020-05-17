@@ -107,6 +107,7 @@ public class WeatherController extends AppCompatActivity {
     private void getWeatherForCurrentLocation() {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -114,26 +115,13 @@ public class WeatherController extends AppCompatActivity {
                 String longitude = String.valueOf(location.getLongitude());
                 String latittude = String.valueOf(location.getLatitude());
 
-
-                SP = getSharedPreferences("MYFILE",0);
-
-                Log.d("weather","latitude"+latittude);
-                Log.d("weather","longitude"+longitude);
-
-                SharedPreferences.Editor edit = SP.edit();
-
-                edit.putString("long",longitude);
-                edit.putString("lat",latittude);
-
-                edit.commit();
-
                 RequestParams params = new RequestParams();
                 params.put("lat", latittude);
                 params.put("lon", longitude);
                 params.put("appid", APP_ID);
                 someNetworking(params);
 
-
+                saveLocation(latittude,longitude);
             }
 
             @Override
@@ -213,4 +201,18 @@ public class WeatherController extends AppCompatActivity {
         int resourceID = getResources().getIdentifier(Weather.getIconName(),"drawable",getPackageName());
         weatherView.setImageResource(resourceID);
     }
+
+
+    public void saveLocation(String latittude, String longitude){
+
+        SP = getSharedPreferences("MYFILE",0);
+        SharedPreferences.Editor edit = SP.edit();
+
+        edit.putString("long",longitude);
+        edit.putString("lat",latittude);
+
+        edit.apply();
+    };
+
 }
+
