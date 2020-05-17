@@ -3,6 +3,7 @@ package com.example.weather;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -41,6 +42,8 @@ public class WeatherController extends AppCompatActivity {
     final float MIN_DISTANCE = 1;
 
     String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
+
+    SharedPreferences SP;
 
 
 
@@ -111,14 +114,26 @@ public class WeatherController extends AppCompatActivity {
                 String longitude = String.valueOf(location.getLongitude());
                 String latittude = String.valueOf(location.getLatitude());
 
+
+                SP = getSharedPreferences("MYFILE",0);
+
                 Log.d("weather","latitude"+latittude);
                 Log.d("weather","longitude"+longitude);
+
+                SharedPreferences.Editor edit = SP.edit();
+
+                edit.putString("long",longitude);
+                edit.putString("lat",latittude);
+
+                edit.commit();
 
                 RequestParams params = new RequestParams();
                 params.put("lat", latittude);
                 params.put("lon", longitude);
                 params.put("appid", APP_ID);
                 someNetworking(params);
+
+
             }
 
             @Override
@@ -197,15 +212,5 @@ public class WeatherController extends AppCompatActivity {
         locationView.setText(Weather.getCityName());
         int resourceID = getResources().getIdentifier(Weather.getIconName(),"drawable",getPackageName());
         weatherView.setImageResource(resourceID);
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if (locationManager!=null){
-            locationManager.removeUpdates(locationListener);
-        }
     }
 }

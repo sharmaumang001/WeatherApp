@@ -64,7 +64,7 @@ public class WeatherDataModel {
     }
 
     public String getTempreture() {
-        return tempreture + "°";
+        return tempreture + "°C";
     }
 
     public String getIconName() {
