@@ -83,6 +83,22 @@ public class WeatherController extends AppCompatActivity {
         super.onResume();
         Log.d("weather", "onResume() called");
 
+        SharedPreferences prefs = getSharedPreferences("ChatPrefs",MODE_PRIVATE);
+        SharedPreferences prefs1 = getSharedPreferences("ChatPrefs1",MODE_PRIVATE);
+
+
+        String longitude =prefs.getString("LONGITUDE",null);
+        String latitude =prefs.getString("LATTITUDE",null);
+
+        Log.d("weather","THE LONGITUDE IS "+longitude+"   THE LATITUDE IS "+latitude);
+
+        RequestParams params = new RequestParams();
+        params.put("lat", latitude);
+        params.put("lon", longitude);
+        params.put("appid", APP_ID);
+
+        someNetworking(params);
+
         Intent myIntent = getIntent();
         String city = myIntent.getStringExtra("city");
 
@@ -113,15 +129,16 @@ public class WeatherController extends AppCompatActivity {
             public void onLocationChanged(Location location) {
                 Log.d("weather", "onLocationChanged() callback received");
                 String longitude = String.valueOf(location.getLongitude());
-                String latittude = String.valueOf(location.getLatitude());
+                String latitude = String.valueOf(location.getLatitude());
 
                 RequestParams params = new RequestParams();
-                params.put("lat", latittude);
+                params.put("lat", latitude);
                 params.put("lon", longitude);
                 params.put("appid", APP_ID);
+
                 someNetworking(params);
 
-                saveLocation(latittude,longitude);
+                saveLocation(latitude,longitude);
             }
 
             @Override
@@ -138,8 +155,7 @@ public class WeatherController extends AppCompatActivity {
             public void onProviderDisabled(String provider) {
                 Log.d("weather", "onProviderDisables() callback received ");
 
-            }
-        };
+            }};
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -180,6 +196,7 @@ public class WeatherController extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response){
                 Log.d("weather","DATA COLLECTED"+ response.toString() );
+                Toast.makeText(WeatherController.this,"Location FOUND",Toast.LENGTH_SHORT).show();
 
                 WeatherDataModel weatherData = WeatherDataModel.fromJSON(response);
                 Update_UI(weatherData);
@@ -189,7 +206,6 @@ public class WeatherController extends AppCompatActivity {
             public  void onFailure(int statusCode, Header[] headers,Throwable e, JSONObject response){
                 Log.e("weather","Fail  "+e.toString());
                 Log.d("weather","Fail..status code"+statusCode);
-                Toast.makeText(WeatherController.this,"Request Failed",Toast.LENGTH_SHORT).show();
              }
         });
     }
@@ -203,15 +219,12 @@ public class WeatherController extends AppCompatActivity {
     }
 
 
-    public void saveLocation(String latittude, String longitude){
+    public void saveLocation(String latitude, String longitude){
+        SharedPreferences prefs = getSharedPreferences("ChatPrefs",0);
+        prefs.edit().putString("LATITUDE",latitude).apply();
 
-        SP = getSharedPreferences("MYFILE",0);
-        SharedPreferences.Editor edit = SP.edit();
-
-        edit.putString("long",longitude);
-        edit.putString("lat",latittude);
-
-        edit.apply();
+        SharedPreferences prefs2 = getSharedPreferences("ChatPrefs1",0);
+        prefs2.edit().putString("LONGITUDE",longitude).apply();
     };
 
 }
